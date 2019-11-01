@@ -42,7 +42,8 @@ public class BigNumber
 	}	// 	End display_bigEnd method
 
 	//	This method gets rid of leading zeros
-	//	NOTE: Does this method actually do anything besides traverse?
+	//	NOTE: Does this method actually do anything besides traverse? Also, shouldn't it start at the head?
+	//	NOTE: Ex. 0100 -> 0100 (nothing changed, but now the tail is at the node with 1 in it?
 	public void simplify()
 	{
 		while(this.tail.number == 0 && this.tail != this.head)
