@@ -1,6 +1,12 @@
 package bigNums;
 import java.util.regex.Pattern; // this allows you to split strings
 
+/*
+ * Names: Paul Scheeler, Devin Porter, Sydney Jenkins, Brandon Wong 
+ * CPS 350 01
+ * Project 1
+ */
+
 public class BigNumber 
 {
 	Digit head;  //	reference to the head node
