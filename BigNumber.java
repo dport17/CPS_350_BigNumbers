@@ -326,4 +326,12 @@ public class BigNumber
 		return false;
 		
 	}	// End first_smaller_than_second method
+	public void multi(BigNumber a, BigNumber b) {
+		BigNumber c=new BigNumber("1");
+		BigNumber sum=new BigNumber("0");
+		while(!(a.head==a.tail&&(a.head.number==0))) {
+			sum.add_assign(b);
+			a.sub_assign(c);
+		}//end while
+	}//end multi
 } 	//	End BigNumber Class
