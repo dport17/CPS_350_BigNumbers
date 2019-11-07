@@ -2,23 +2,22 @@ import java.util.*;
 
 public class Channel 
 { 
-	int p = a; 
-	int q = b ; 
-	int n = p * q ; 
-	int e = 11 ; 
+	int p = null; 
+	int q = null; 
+	int n = p * q; 
+	int e = 11; 
 	
-	
-	
-	
-	public encrypt(String x) {
+	public encrypt(BigNumber m) 
+	{
 		
 		
 	
 	
-	}
-	public decrypt{
-		
-		
-	}
+	}	//	End encrypt method
 	
+	public decrypt(BigNumber c)
+	{
+		
+		
+	}	//	End decrypt method
 }	//	End Channel class
