@@ -56,6 +56,15 @@ public class BigNumber
 		
 	}	// 	End simplify method
 	
+	public String backToString() {
+		Digit iter=this.tail;
+		String revertedBigNum="";
+		for(; iter!=null;iter=iter.previous) {
+			revertedBigNum=revertedBigNum+iter.number;
+		}
+		return revertedBigNum;
+	}//end backToString
+	
 	public BigNumber(final String strNum)
 	{
 	    	// 	String number (assumed to be correct) to a doubly linked list
@@ -334,4 +343,19 @@ public class BigNumber
 			a.sub_assign(c);
 		}//end while
 	}//end multi
+	
+	//This will return a BigNumber to a given power. HOWEVER, since we're using Little Endian notation, IT DOES 
+	//NOT RETURN A STRING IN THE CORRECT ORDER. In the Channel class, then, we'll need to convert the BigNumbers back to strings
+	// to the correct order before we can analyze the string of numbers, 
+	//which we'll have to do since it's in unicode, and convert it back to an actual message.
+	//I'm writing a method for that called "backToString"
+	public BigNumber toThePowerOf(BigNumber a) {
+		BigNumber minusOne=new BigNumber("1");
+		BigNumber result=new BigNumber(this);
+		while(!((a.head.number<=1)&&(a.head==a.tail))) {
+			result.add_assign(multi(this, result));
+			a.sub_assign(minusOne);
+		}
+		return result;
+	}//end toThePowerOf
 } 	//	End BigNumber Class
