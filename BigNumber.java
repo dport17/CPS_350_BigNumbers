@@ -283,13 +283,13 @@ public class BigNumber
 		
 		return c;
 		
-	} //	End sub method
+	} 	//	End sub method
 	
 	public void make_negative()
 	{
 		this.tail.number = this.tail.number * -1;
 		
-	}	// End make_negative method
+	}	//	End make_negative method
 	
 	public static boolean first_smaller_than_second(final BigNumber a, final BigNumber b)
 	{
@@ -334,28 +334,49 @@ public class BigNumber
 
 		return false;
 		
-	}	// End first_smaller_than_second method
-	public void multi(BigNumber a, BigNumber b) {
-		BigNumber c=new BigNumber("1");
-		BigNumber sum=new BigNumber("0");
-		while(!(a.head==a.tail&&(a.head.number==0))) {
+	}	// 	End first_smaller_than_second method
+	public void multi(BigNumber a, BigNumber b) 
+	{
+		BigNumber c = new BigNumber("1");
+		BigNumber sum = new BigNumber("0");
+		while(!(a.head == a.tail) && (a.head.number == 0)) 
+		{
 			sum.add_assign(b);
 			a.sub_assign(c);
-		}//end while
-	}//end multi
+		}
+		
+	}	//	end multi method
 	
-	//This will return a BigNumber to a given power. HOWEVER, since we're using Little Endian notation, IT DOES 
-	//NOT RETURN A STRING IN THE CORRECT ORDER. In the Channel class, then, we'll need to convert the BigNumbers back to strings
-	// to the correct order before we can analyze the string of numbers, 
-	//which we'll have to do since it's in unicode, and convert it back to an actual message.
-	//I'm writing a method for that called "backToString"
-	public BigNumber toThePowerOf(BigNumber a) {
-		BigNumber minusOne=new BigNumber("1");
-		BigNumber result=new BigNumber(this);
-		while(!((a.head.number<=1)&&(a.head==a.tail))) {
+	/*
+	This will return a BigNumber to a given power. HOWEVER, since we're using Little Endian notation, IT DOES NOT
+	RETURN A STRING IN THE CORRECT ORDER. In the Channel class, then, we'll need to convert the BigNumbers 
+	back to strings to the correct order before we can analyze the string of numbers, 
+	which we'll have to do since it's in unicode, and convert it back to an actual message.
+	I'm writing a method for that called "backToString"
+	*/
+
+	public BigNumber toThePowerOf(BigNumber a) 
+	{
+		BigNumber minusOne = new BigNumber("1");
+		BigNumber result = new BigNumber(this);
+		
+		while(!((a.head.number <= 1) && (a.head == a.tail))) 
+		{
 			result.add_assign(multi(this, result));
 			a.sub_assign(minusOne);
 		}
+		
 		return result;
-	}//end toThePowerOf
+		
+	}	//	end toThePowerOf method
+	
+	public boolean isPrime(int n) 
+	{
+        	if (n < 0)			return false;	// negative number
+        	if (n == 0 || n == 1) 		return false;	// 0 or 1
+        	if (n == 2 || n == 3) 		return true;	// 2 or 3
+        	if ((n * n - 1) % 24 == 0)	return true; 	// if this executes, then it is a prime number
+		else				return false;	// every other number should be a composite number
+       
+	}	//	End isPrime method
 } 	//	End BigNumber Class
