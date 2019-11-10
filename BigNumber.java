@@ -379,4 +379,53 @@ public class BigNumber
 		else				return false;	// every other number should be a composite number
        
 	}	//	End isPrime method
+	
+	// compute: a % b
+	static BigNumber modulus(BigNumber a, BigNumber b)
+	{
+		
+		/* 		to compute a % b
+		 * 		do a - b, until b<a is false
+		 * 		return a, which will be the remainder
+		 */
+
+		//while( first_smaller_than_second(b,a) )	
+			//a = sub(a,b);
+		for(int i = 0; i<3; i++)
+		{
+			a = sub(a,b);
+			System.out.print("a: "); a.display_bigEnd(); System.out.println();
+			System.out.print("b: "); b.display_bigEnd(); System.out.println();
+			System.out.println( "b<a " + first_smaller_than_second(b,a) ); System.out.println();
+		}
+		BigNumber copy_a = new BigNumber(a);
+		BigNumber copy_b = new BigNumber(b);
+		System.out.println( "b<a " + first_smaller_than_second(copy_b,copy_a) ); System.out.println();
+		//after this process is done, a will be zero (if a/b is whole number) or the remainder
+		return a;
+	} //end modulus method
+	
+	// compute: a/b
+	static BigNumber div(BigNumber a, BigNumber b)
+	{
+		BigNumber one = new BigNumber("1");
+		BigNumber quotient = new BigNumber("0");
+		
+		/* 		compute a % b
+		 * 		do a - b, until b>a
+		 * 
+		 */
+		
+		// every time you can successfully subtract b from a, increment quoetient--since, quotient * b  = a - remainder
+		while( first_smaller_than_second(b,a) )
+		{
+			a = sub(a,b);
+			quotient.add_assign(one);
+			
+		}
+		
+		//after this process is done, a will be zero (if a/b is whole number) or the remainder
+		return quotient;
+	} //end div method
 } 	//	End BigNumber Class
+
