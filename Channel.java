@@ -10,8 +10,11 @@ public class Channel
 	//for the value of n
 	BigNumber pTimesq=new BigNumber("");
 	//for the public key
-	BigNumber e;
+	BigNumber e=new BigNumber("11");
 	//for the private key
+	//In order for d*e to be one less than the product of (p-1)*(q-1), I think we need d=(((p-1)*(q-1)-1)/e)? Not sure if there's 
+	//some mathematical principle where if you have a prime minus 1 times a prime minus one, and then take 1 away from that result,
+	//you somehow get a number divisible by ANY prime? Idk.
 	BigNumber d;
 	public Channel(BigNumber p, BigNumber q) {
 		if(p.isPrime()&&q.isPrime()) {
