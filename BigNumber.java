@@ -389,18 +389,9 @@ public class BigNumber
 		 * 		return a, which will be the remainder
 		 */
 
-		//while( first_smaller_than_second(b,a) )	
-			//a = sub(a,b);
-		for(int i = 0; i<3; i++)
-		{
+		while( first_smaller_than_second(b,a) )	
 			a = sub(a,b);
-			System.out.print("a: "); a.display_bigEnd(); System.out.println();
-			System.out.print("b: "); b.display_bigEnd(); System.out.println();
-			System.out.println( "b<a " + first_smaller_than_second(b,a) ); System.out.println();
-		}
-		BigNumber copy_a = new BigNumber(a);
-		BigNumber copy_b = new BigNumber(b);
-		System.out.println( "b<a " + first_smaller_than_second(copy_b,copy_a) ); System.out.println();
+
 		//after this process is done, a will be zero (if a/b is whole number) or the remainder
 		return a;
 	} //end modulus method
