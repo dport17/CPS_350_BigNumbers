@@ -52,7 +52,12 @@ public class BigNumber
 	//	NOTE: Ex. 0100 -> 0100 (nothing changed, but now the tail is at the node with 1 in it?
 	public void simplify()
 	{
-		while(this.tail.number == 0 && this.tail != this.head)	this.tail = this.tail.previous;
+		//this method gets rid of leading zeros
+		while(this.tail.number==0 && this.tail!=this.head)
+		{
+			this.tail=this.tail.previous;
+			this.tail.next=null;
+		}
 		
 	}	// 	End simplify method
 	
