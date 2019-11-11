@@ -10,4 +10,4 @@ JOBS UP FOR GRABS RIGHT NOW:
  2. Figure out how we're reversing that process, from a BigNum to a unicode string to a message.
  3. isPrime method which Brandon currently has dibs on.
  4. Constructors which Sydney has.
- 
+ 5. We need to handle situations in BigNumber where we need to multiply/add/sub/raise negative numbers.
