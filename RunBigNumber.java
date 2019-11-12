@@ -26,7 +26,16 @@ public class RunBigNumber {
 		//number.display_bigEnd();
 		//copy.display_bigEnd();
 		
-	
+		String str=new String("220");
+		BigNumber factor1=new BigNumber(str);
+		factor1.display_bigEnd();
+		BigNumber factor2=new BigNumber("100");
+		factor2.display_bigEnd();
+		
+		BigNumber product=new BigNumber("897");
+		product.display_bigEnd();
+		product=product.toThePowerOf(new BigNumber("11"));
+		product.display_bigEnd();
 
 	}
 	
