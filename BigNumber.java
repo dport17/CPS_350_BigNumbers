@@ -87,7 +87,7 @@ public class BigNumber
 		
 		Digit iter = new Digit();
 		iter = head;
-
+		tail=head;
 		// 	count from the bottom of the array up, add the digits to linked list
 		// 	minus one, since head already has the last digit
 		for(int i = max_pos-1; i >= 0; i--)
@@ -199,6 +199,11 @@ public class BigNumber
 	
 	public void sub_assign(final BigNumber b)
 	{
+		if(this.head.next==null&&b.head.next==null) {
+			this.head.number-=b.head.number;
+			return;
+		}
+		
 		Digit sum = new Digit(this.head);
 		Digit iter1 = new Digit(this.head);
 		Digit iter2 = new Digit(b.head);
@@ -340,16 +345,107 @@ public class BigNumber
 		return false;
 		
 	}	// 	End first_smaller_than_second method
-	public void multi(BigNumber a, BigNumber b) 
+	//compute and return a*b
+	public static BigNumber multi(BigNumber a, BigNumber b) 
 	{
-		BigNumber c = new BigNumber("1");
-		BigNumber sum = new BigNumber("0");
-		while(!(a.head == a.tail) && (a.head.number == 0)) 
-		{
-			sum.add_assign(b);
-			a.sub_assign(c);
+		//first, figure out which number is smaller and which is larger. This makes it easier to multiply, at least it's more intuitive for me.
+		BigNumber smallerNum=new BigNumber("0");
+		BigNumber biggerNum=new BigNumber("0");
+		
+		if(first_smaller_than_second(a,b)) {
+			smallerNum=a;
+			biggerNum=b;
 		}
 		
+		else {
+			biggerNum=a;
+			smallerNum=b;
+		}
+		
+		//now, imagine you're doing multiplication by hand. You know there will be as many rows as there are digits in the number on the bottom, assuming
+		//that the number on the bottom has exactly as many or less digits than the one on top, the larger number. This array will hold each of those rows.
+		BigNumber[] numArray=new BigNumber[smallerNum.size()];
+		
+		//this will iterate over the smaller number.
+		Digit iter2=smallerNum.head;
+		
+		//this will help determine two things: first, where to put the most recent BigNum in a row while solving, and also to help keep track of when we 
+		//need to add a zero to a row before we can begin adding actual numerical values to it. 
+		int count=-1;
+		for(; iter2!=null;iter2=iter2.next) {
+			
+			//I named each of the rows "sum". Perhaps "row" would be more appropriate. Imagine it as one of the rows you see when solving a multiplication
+			//problem by hand, before you eventually add them all up.
+			
+			//also, iter1 will iterate over the bigger number. Of course, each of the digits in the smaller number will need to me multiplied by each one
+			//in the larger number. 
+			Digit iter1=biggerNum.head;
+			//This "sum" BigNumber resets to one Digit of number 0 every time we move from one digit in the smaller number to the next Digit in it.
+			//This is because we have started a new row. 
+			BigNumber sum=new BigNumber("0");
+			//the sumIter will iterate over the sum BigNumber, so that more Digits can be appended to it and it can eventually be added to the numArray.
+			Digit sumIter=sum.head;
+			//we need to reset carry to 0 each time we move to a new digit in smallerNum.
+			int carry=0;
+			//we increase count by one each time we move to a new digit in smallerNum
+			count++;
+			
+			//this will add the zeros to the new row. It also moves sumIter to the END DIGIT OF THE BIGNUMBER "SUM", which is coincidentally the tail.
+			//This tail can and will change when the value of it is determined by multiplication.
+			for(int i=1;i<=count;i++) {
+				Digit nextDig=new Digit(0);
+				sumIter.next=nextDig;
+				nextDig.previous=sumIter;
+				sumIter=sumIter.next;
+				sum.tail=sumIter;
+			}//end for loop
+			
+			//Now, we begin traversing the biggerNum.
+			for(; iter1!=null; iter1=iter1.next) {
+				//we store the product of the numbers of iter1 and iter2, which are really whatever digits the two iters are at 
+				//at a given time.
+				int storage=iter1.number*iter2.number;
+				//we then assign the number of the Digit where sumIter is to the remainder of (storage+carry)/10, just as you would when
+				//multiplying by hand.
+				sumIter.number=(storage+carry)%10;
+				//carry becomes, basically, the first number in a two digit integer, and this will evaluate to zero if the sum of itself and
+				//storage is less than 10.
+				carry=(storage+carry)/10;
+				
+				//Since sumIter.next will be null, we need to make a new Digit to follow it up.
+				if(!((iter1.next==null)&&(carry==0))){
+					
+					sumIter.next=new Digit();
+					sumIter.next.previous=sumIter;
+					//and increment sumIter.
+					sumIter=sumIter.next;
+					//and set the tail to it.
+					sum.tail=sumIter;
+					
+					//Now that we've added that digit, if iter1.next is null, this loop will not execute again. Because of that, we need to update the 
+					//number data field of the new Digit to whatever is left over from carry.
+					if(iter1.next==null&&carry!=0) sumIter.number=carry;
+				}//end if					
+				
+			}//end for
+			
+			//Now, populate the array with the row, called sum, which is being treated as a BigNumber so that all of the rows can be added together
+			//at the end, as in hand-done multiplication.
+			numArray[count]=new BigNumber(sum);
+			//now we can reset sum, carry, and sumIter, so that we can do the whole process again with the next digit in smallerNum.
+		}//end outer for
+		
+		//Once the array has been populated, we need to add each of the BigNumbers, or "rows" that we placed in it.
+		//I'll start by just calling the result the first BigNumber in the array.
+		BigNumber result=new BigNumber(numArray[0]);
+		
+		for(int j=1; j<numArray.length;j++) {
+			//now, I'll add each of the rows following the first and updated result every time, until I reach the end of the array.
+			result=BigNumber.add(result, numArray[j]);
+		}//end for loop
+		
+		//Now, we return the result, which is the product of the two BigNumbers we were given.
+		return result;
 	}	//	end multi method
 	
 	/*
@@ -423,5 +519,14 @@ public class BigNumber
 		//after this process is done, a will be zero (if a/b is whole number) or the remainder
 		return quotient;
 	} //end div method
+	
+	public int size() {
+		int count=0;
+		Digit iter1=this.head;
+		for(; iter1!=null;iter1=iter1.next) {
+			count++;
+		}
+		return count;
+	}
 } 	//	End BigNumber Class
 
