@@ -15,22 +15,39 @@ public class Channel
 	//In order for d*e to be one less than the product of (p-1)*(q-1), I think we need d=(((p-1)*(q-1)-1)/e)? Not sure if there's 
 	//some mathematical principle where if you have a prime minus 1 times a prime minus one, and then take 1 away from that result,
 	//you somehow get a number divisible by ANY prime? Idk.
-	BigNumber d;
+	BigNumber d = new BigNumber(null) ; 
+	BigNumber d = (((p-1) * (q-1) -1) / e) ; 
 	
 	//This constructor might be wrong, I just threw it together.
 	//I'm also realizing that all the user plans on giving us is a message of characters. We might need to use this class to switch
 	//a given message over to a unicode string, then into a BigNumber.
+	
+	//isPrime method... NOT SURE IF RIGHT!!!!!!!!!!!1
+	public boolean isPrime(BigNumber num)
+	{
+	    if (num == 2)
+	    { return true ; }
+	    //# prime nums can't be less divisible by two (except 2)
+	    if (num < 2) || (num % 2 == 0)
+	    {return false ; }
+	  for(int i = 2; i <= num/2; ++i){
+		  if (num % n == 0)
+			{return false ; }
+	   else
+		   return true ; }
+	}
+
 	public Channel(BigNumber p, BigNumber q) {
 		
 		//if both the user input values are prime, we're in business.
 		//Other than, ya know, we don't have a message to apply them to.
-		if(p.isPrime()&&q.isPrime()) {
+		if(isPrime(p)&&isPrime(q)) {
 			this.p=p;this.q=q;
 			n=pTimesq.multi(this.p,this.q);
 		}
 		//if not, RIP. This case needs to be handled. Not sure how.
 		else {
-			System.out.println("p, q, or both are not prime.");
+			throw new Exception("p, q, or both are not prime."); //if not prime, throw exception and terminate.
 		}
 	}//end Channel constructor
 	
