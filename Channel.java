@@ -8,7 +8,6 @@ public class Channel
 	//for n in both keys
 	BigNumber n;
 	//for the value of n
-	BigNumber pTimesq=new BigNumber("");
 	//for the public key
 	BigNumber e=new BigNumber("11");
 	//for the private key
@@ -43,7 +42,7 @@ public class Channel
 		//Other than, ya know, we don't have a message to apply them to.
 		if(isPrime(p)&&isPrime(q)) {
 			this.p=p;this.q=q;
-			n=pTimesq.multi(this.p,this.q);
+			n=BigNumber.multi(this.p,this.q);
 		}
 		//if not, RIP. This case needs to be handled. Not sure how.
 		else {
