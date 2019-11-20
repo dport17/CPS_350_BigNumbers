@@ -9,10 +9,10 @@ import java.util.*;
 
 public class TreeNode 
 {
-	int value;		//	Value of the node
+	int value;	// Value of the node
 	
-	TreeNode left;	//	Reference to left child
-	TreeNode right;	//	Reference to right child
+	TreeNode left;	// Reference to left child
+	TreeNode right;	// Reference to right child
 	
 	public TreeNode()
 	{
@@ -20,7 +20,7 @@ public class TreeNode
 		left = null;
 		right = null;
 		
-	}	//	End default constructor
+	} //	End default constructor
 	
 	public TreeNode(int v)
 	{
@@ -28,7 +28,7 @@ public class TreeNode
 		left = null;
 		right = null;
 		
-	}	// End partial constructor
+	} // 	End partial constructor
 	
 	public TreeNode(int v, TreeNode child)
 	{
@@ -40,7 +40,7 @@ public class TreeNode
 			left = null;
 			right = child;
 			
-		}	//	End if statement
+		} //	End if statement
 		
 		//	Executes when the child's value is smaller than or equal to the parent's value
 		else	// (child.value <= value)
@@ -48,8 +48,8 @@ public class TreeNode
 			left = child;
 			right = null;
 			
-		}	//	End else statement
-	}	// 	End partial constructor
+		} //	End else statement
+	} // 	End partial constructor
 	
 	public TreeNode(int v, TreeNode child1, TreeNode child2)
 	{
@@ -66,8 +66,8 @@ public class TreeNode
 			if (child1.value <= value)	left = child1;
 			if (child2.value <= value)	left = child2;
 		
-		}	//	End if statement
-	}	//	End full constructor
+		} //	End if statement
+	} //	End full constructor
 	
 	
 	//	NOTE: This copy method most likely doesn't work
@@ -77,5 +77,5 @@ public class TreeNode
 		left = copy.left;
 		right = copy.right;
 		
-	}	// End copy constructor
-}	// End TreeNode Class
+	} // 	End copy constructor
+} // 	End TreeNode Class
