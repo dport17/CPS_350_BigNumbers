@@ -1,7 +1,7 @@
 import java.util.*;
 
 /*
- * Name: Paul Scheeler, Devin Porter, Sydney Jenkins, Brandon Wong 
+ * Names: Paul Scheeler, Devin Porter, Sydney Jenkins, Brandon Wong 
  * CPS 350 01
  * Project 3
  * 
