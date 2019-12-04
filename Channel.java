@@ -35,13 +35,23 @@ public class Channel
 	   else
 		   return true ; }
 	}
+		
+	public boolean isPrimeInt(int n) 
+	{
+        	if (n < 0)			return false;	// negative number
+        	if (n == 0 || n == 1) 		return false;	// 0 or 1
+        	if (n == 2 || n == 3) 		return true;	// 2 or 3
+        	if ((n * n - 1) % 24 == 0)	return true; 	// if this executes, then it is a prime number
+		else				return false;	// every other number should be a composite number
+       
+	}	//	End isPrime method
 	
 	public int generatePrime {
         int num = 0;
         Random rand = new Random(); // generate a random number
         num = rand.nextInt(1000) + 1; //number is between 1 and 1001
 
-        while (!isPrime(num)) //loops until number is prime by calling isPrime method above
+        while (!isPrimeInt(num)) //loops until number is prime by calling isPrime method above
 	{num = rand.nextInt(1000) + 1; } //if not prime, pick a new number!!
         return num;  // print the number //once number is determined to be prime, returns int
     }
