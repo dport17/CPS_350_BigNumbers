@@ -339,8 +339,8 @@ public class BigNumber
 			iter_b = iter_b.previous;
 		}
 		
-		if(a.head.number >= b.head.number)	return false;
-		if(b.head.number > a.head.number)	return true;
+		if(a.head.number > b.head.number)	return false;
+		if(b.head.number >= a.head.number)	return true;
 
 		return false;
 		
@@ -482,43 +482,110 @@ public class BigNumber
 	}	//	End isPrime method
 	
 	// compute: a % b
-	static BigNumber modulus(BigNumber a, BigNumber b)
+	public static BigNumber modulus(BigNumber a, BigNumber b)
 	{
+		if(a==b) {
+			return new BigNumber("0");
+		}
+		else if(first_smaller_than_second(a,b)) {
+			return modulus(b,a);
+		}
 		
-		/* 		to compute a % b
-		 * 		do a - b, until b<a is false
-		 * 		return a, which will be the remainder
-		 */
-
-		while( first_smaller_than_second(b,a) )	
-			a = sub(a,b);
-
-		//after this process is done, a will be zero (if a/b is whole number) or the remainder
-		return a;
+		BigNumber resultOfDiv=a.divideBy(b);
+		BigNumber resOfMulti=multi(b, resultOfDiv);
+		return sub(a, resOfMulti);
+		
 	} //end modulus method
 	
 	// compute: a/b
-	static BigNumber div(BigNumber a, BigNumber b)
-	{
-		BigNumber one = new BigNumber("1");
-		BigNumber quotient = new BigNumber("0");
+	public BigNumber divideBy(BigNumber smallerThanThis) {
+		BigNumber numToSubFrom=new BigNumber(findNumToSubFrom(smallerThanThis, this));
+		Digit numTrackIter=numToSubFrom.head;
+		Digit thisIter=this.tail;
 		
-		/* 		compute a % b
-		 * 		do a - b, until b>a
-		 * 
-		 */
-		
-		// every time you can successfully subtract b from a, increment quoetient--since, quotient * b  = a - remainder
-		while( first_smaller_than_second(b,a) )
-		{
-			a = sub(a,b);
-			quotient.add_assign(one);
-			
+		for(int i=1;i<numToSubFrom.size();i++) {
+			thisIter=thisIter.previous;
 		}
 		
-		//after this process is done, a will be zero (if a/b is whole number) or the remainder
-		return quotient;
-	} //end div method
+		BigNumber[] result=new BigNumber[this.size()];
+		int currResultPos=0;
+		int currResSize=0;
+		
+		while(!(thisIter==null)) {
+			
+			BigNumber increment=new BigNumber("0");
+			BigNumber currentVal=new BigNumber("0");
+			//currentVal.display_bigEnd();
+			BigNumber currRemainder=sub(numToSubFrom, currentVal);
+			//currRemainder.display_bigEnd();
+			
+			
+			while (first_smaller_than_second(smallerThanThis, currRemainder)) {
+				increment.add_assign(new BigNumber("1"));
+				currentVal=multi(smallerThanThis, increment);
+				//currentVal.display_bigEnd();
+				currRemainder=sub(numToSubFrom, currentVal);
+				//currRemainder.display_bigEnd();
+			}//end while
+			
+			result[currResultPos]=increment;
+			currResultPos++;
+			currResSize++;
+			
+			numToSubFrom=sub(numToSubFrom, currentVal);
+			
+			if(thisIter.previous!=null) {
+				numTrackIter=numToSubFrom.head;
+				numTrackIter.previous=new Digit(thisIter.previous.number);
+				numTrackIter.previous.next=numTrackIter;
+				numTrackIter=numTrackIter.previous;
+				numToSubFrom.head=numTrackIter;
+			}
+			
+			thisIter=thisIter.previous;
+			
+		}//end while
+		
+		BigNumber finalResult=new BigNumber("0");
+		finalResult.tail=new Digit(result[0].head.number);
+		Digit iter=finalResult.tail;
+		finalResult.head=iter;
+		
+		for(int i=1;i<currResSize;i++) {
+			iter.previous=new Digit(result[i].head.number);
+			iter.previous.next=iter;
+			iter=iter.previous;
+			finalResult.head=iter;
+		}//end for
+		
+		return finalResult;
+	}//end division
+	
+	//this is a helper method for div. It allows us to identify the smallest subset of digits from which we can 
+	//subtract the closest divisor of the number to be divided by, to the number to be subtracted from using
+	//long division techniques.
+	
+	private static BigNumber findNumToSubFrom(BigNumber smaller, BigNumber bigger) {
+		if(first_smaller_than_second(bigger, smaller)) {
+			return findNumToSubFrom(bigger, smaller);
+		}
+		Digit iter=bigger.tail;
+		BigNumber newNum=new BigNumber("0");
+		newNum.head=new Digit(iter.number);
+		newNum.tail=newNum.head;
+		Digit newNumIter=newNum.tail;
+		
+		while(first_smaller_than_second(newNum, smaller)) {
+			newNumIter.previous=new Digit(iter.previous.number);
+			newNumIter.previous.next=newNumIter;
+			iter=iter.previous;
+			newNumIter=newNumIter.previous;
+			newNum.head=newNumIter;
+		}
+		//Basically what I'm returning here is a whole new BigNumber that's isolated the smallest sub-number, if you will,
+		//of the number that we're trying to divide that is still larger than the number we're dividing by.
+		return newNum;
+	}//end findNumToSubFrom
 	
 	public int size() {
 		int count=0;
