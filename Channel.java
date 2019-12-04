@@ -21,7 +21,6 @@ public class Channel
 	//I'm also realizing that all the user plans on giving us is a message of characters. We might need to use this class to switch
 	//a given message over to a unicode string, then into a BigNumber.
 	
-	//isPrime method... NOT SURE IF RIGHT!!!!!!!!!!!1
 	public boolean isPrime(BigNumber num) //for bigNumbers
 	{
  	if (num < 0)					return false;	// negative number
