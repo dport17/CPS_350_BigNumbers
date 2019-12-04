@@ -35,6 +35,16 @@ public class Channel
 	   else
 		   return true ; }
 	}
+	
+	public int generatePrime {
+        int num = 0;
+        Random rand = new Random(); // generate a random number
+        num = rand.nextInt(1000) + 1; //number is between 1 and 1001
+
+        while (!isPrime(num)) //loops until number is prime by calling isPrime method above
+	{num = rand.nextInt(1000) + 1; } //if not prime, pick a new number!!
+        return num;  // print the number //once number is determined to be prime, returns int
+    }
 
 	public Channel(BigNumber p, BigNumber q) {
 		
