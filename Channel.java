@@ -22,21 +22,16 @@ public class Channel
 	//a given message over to a unicode string, then into a BigNumber.
 	
 	//isPrime method... NOT SURE IF RIGHT!!!!!!!!!!!1
-	public boolean isPrime(BigNumber num)
+	public boolean isPrime(BigNumber num) //for bigNumbers
 	{
-	    if (num == 2)
-	    { return true ; }
-	    //# prime nums can't be less divisible by two (except 2)
-	    if (num < 2) || (num % 2 == 0)
-	    {return false ; }
-	  for(int i = 2; i <= num/2; ++i){
-		  if (num % n == 0)
-			{return false ; }
-	   else
-		   return true ; }
+ 	if (num < 0)					return false;	// negative number
+        	if (num == 0 || num == 1) 		return false;	// 0 or 1
+        	if (num == 2 || num == 3) 		return true;	// 2 or 3
+        	if ((num * num - 1) % 24 == 0)		return true; 	// if this executes, then it is a prime number
+		else					return false;	// every other number should be a composite number
 	}
 		
-	public boolean isPrimeInt(int n) 
+	public boolean isPrimeInt(int n) //for ints. Used in generatePrime.
 	{
         	if (n < 0)			return false;	// negative number
         	if (n == 0 || n == 1) 		return false;	// 0 or 1
@@ -44,7 +39,7 @@ public class Channel
         	if ((n * n - 1) % 24 == 0)	return true; 	// if this executes, then it is a prime number
 		else				return false;	// every other number should be a composite number
        
-	}	//	End isPrime method
+	}	//	End isPrimeInt method
 	
 	public int generatePrime {
         int num = 0;
