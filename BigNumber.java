@@ -50,6 +50,8 @@ public class BigNumber
 	//	This method gets rid of leading zeros
 	//	NOTE: Does this method actually do anything besides traverse? Also, shouldn't it start at the head?
 	//	NOTE: Ex. 0100 -> 0100 (nothing changed, but now the tail is at the node with 1 in it?
+	//  REPLY: it starts at the tail because the tail contains the most significant digit!--which is where
+	//        leading zeros will be  
 	public void simplify()
 	{
 		//this method gets rid of leading zeros
@@ -90,7 +92,7 @@ public class BigNumber
 		tail=head;
 		// 	count from the bottom of the array up, add the digits to linked list
 		// 	minus one, since head already has the last digit
-		for(int i = max_pos-1; i >= 0; i--)
+		for(int i = max_pos-1; i > 0; i--)
 		{
 			//	create digit with proper value
 			Digit a = new Digit(Integer.parseInt(nums[i]));
@@ -104,6 +106,25 @@ public class BigNumber
 			iter = iter.next;	// increment the iterator
 			
 		}	//	End for loop
+		// check for a negative sign... if no negative sign, simply add in the last number to the tail 
+		// otherwise, make the current tail negative
+		if( strNum.charAt(0) == '-')
+		{
+			this.tail.number = this.tail.number * -1;
+		}
+		else // otherwise, we assume the first element is a number 
+		{
+			// create digit with proper value
+			Digit a = new Digit(Integer.parseInt(nums[0]));
+			
+			// situate it
+			a.next = null;
+			a.previous = iter;
+			iter.next = a;
+			
+			tail = a;
+		}
+		
 	}	//	End constructor
 
 	// 	copy constructor, notice that you need to create a new list which represents
@@ -187,6 +208,34 @@ public class BigNumber
 	// 	addition: return a + b
 	public static BigNumber add(final BigNumber a, final BigNumber b)
 	{
+		if( a.isNegative() &&  b.isNegative() )
+		{
+			// (-a) + (-b) = -(a + b)
+			a.make_negative(); b.make_negative();
+			BigNumber c = new BigNumber(a);
+			c.add_assign(b);
+			c.make_negative();
+			return c;
+		} 
+		else if( ! a.isNegative() && b.isNegative() )
+		{
+			// a + (-b) = a - b
+			// make b positive
+			b.make_negative();
+			// subtract b from a
+	    	BigNumber c = BigNumber.sub(a, b);
+	    	c.simplify();
+	    	return c;
+		}
+		else if( a.isNegative() && ! b.isNegative() )
+		{
+			// (-a) + b = b - a
+			a.make_negative();
+			BigNumber c = BigNumber.sub(b,a);
+			c.simplify();
+			return c;
+		}
+		// otherwise, just do things normally (both a and b are positve)
 		BigNumber c = new BigNumber(a);
 	    	c.add_assign(b);    // 	calling the method for +=
 	    	
@@ -200,7 +249,7 @@ public class BigNumber
 	public void sub_assign(final BigNumber b)
 	{
 		if(this.head.next==null&&b.head.next==null) {
-			this.head.number-=b.head.number;
+			this.head.number-=b.head.number; 
 			return;
 		}
 		
@@ -275,9 +324,53 @@ public class BigNumber
 	
 	public static BigNumber sub(final BigNumber a, final BigNumber b)
 	{
-		boolean compare = first_smaller_than_second(a,b);
+
+		if( ! a.isNegative() && b.isNegative() )
+		{
+			// a - (-b) = a + b
+			b.make_negative();
+			BigNumber d = BigNumber.add(a, b);
+			return d;
+		}		
+		else if( a.isNegative() && ! b.isNegative() )
+		{
+			// (-a) - b = -(a+b)
+			a.make_negative(); 
+			BigNumber d = BigNumber.add(a, b);
+			d.make_negative();
+			return d;
+		}
+		else if( a.isNegative() && b.isNegative() )
+		{
+			// now, if a and b are both negative, we compare the magnitudes of a and b
+			// whichever has a larger magnitude will be the smaller number!
+			a.make_negative(); b.make_negative();
+			
+			// switch a and b (represented here by taking the negation of first_smaller)
+			boolean compare = ! first_smaller_than_second(a,b);
+			
+			if(compare)
+			{
+				BigNumber d = new BigNumber(b);
+				d.sub_assign(a);
+				d.simplify();
+				d.make_negative();
+				
+				return d;
+			}	// End if statement
+			
+			BigNumber d = new BigNumber(a);
+			d.sub_assign(b);
+			d.simplify();
+			d.make_negative();
+			
+			return d;	
+		}
+
 		
-		if(compare==true)
+		// otherwise, a and b are both positive
+		boolean compare = compare = first_smaller_than_second(a,b);
+		if(compare)
 		{
 			BigNumber d = new BigNumber(b);
 			d.sub_assign(a);
@@ -287,13 +380,21 @@ public class BigNumber
 			return d;
 		}	// End if statement
 		
-		BigNumber c = new BigNumber(a);
-		c.sub_assign(b);
-		c.simplify();
+		BigNumber d = new BigNumber(a);
+		d.sub_assign(b);
+		d.simplify();
 		
-		return c;
+		return d;
 		
 	} 	//	End sub method
+	
+	public boolean isNegative()
+	{
+		if(this.tail.number < 0)
+			return true;
+		
+		return false;
+	}
 	
 	public void make_negative()
 	{
