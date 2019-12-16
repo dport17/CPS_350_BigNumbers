@@ -600,6 +600,21 @@ public class BigNumber
 	
 	// compute: a/b
 	public BigNumber divideBy(BigNumber smallerThanThis) {
+		boolean oneWasNegative=false;
+		if(this.tail.number<0||smallerThanThis.tail.number<0) {
+			if(this.tail.number<0&&smallerThanThis.tail.number<0) {
+				this.tail.number*=-1;
+				smallerThanThis.tail.number*=-1;
+			}
+			else if(this.tail.number<0){
+				this.tail.number*=-1;
+				oneWasNegative=true;
+			}
+			else {
+				smallerThanThis.tail.number*=-1;
+				oneWasNegative=true;
+			}
+		}
 		BigNumber numToSubFrom=new BigNumber(findNumToSubFrom(smallerThanThis, this));
 		Digit numTrackIter=numToSubFrom.head;
 		Digit thisIter=this.tail;
@@ -658,7 +673,10 @@ public class BigNumber
 			iter=iter.previous;
 			finalResult.head=iter;
 		}//end for
-		
+		finalResult.simplify();
+		if(oneWasNegative) {
+			finalResult.make_negative();
+		}
 		return finalResult;
 	}//end division
 	
@@ -686,7 +704,7 @@ public class BigNumber
 		//Basically what I'm returning here is a whole new BigNumber that's isolated the smallest sub-number, if you will,
 		//of the number that we're trying to divide that is still larger than the number we're dividing by.
 		return newNum;
-	}//end findNumToSubFrom
+	}
 	
 	public int size() {
 		int count=0;
