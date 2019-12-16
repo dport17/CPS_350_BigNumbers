@@ -17,28 +17,7 @@ public class Channel
 	int e;
 	//for the private key
 	int d;
-	//both d and e will be switched over to BigNumbers eventually so we can encrypt and decrypt.
-	
-	//This constructor might be wrong, I just threw it together.
-	//I'm also realizing that all the user plans on giving us is a message of characters. We might need to use this class to switch
-	//a given message over to a unicode string, then into a BigNumber.
-	
-	//isPrime method... NOT SURE IF RIGHT!!!!!!!!!!!1
-	/*
-	public boolean isPrime(BigNumber num)
-	{
-	    if (num == 2)
-	    { return true ; }
-	    //# prime nums can't be less divisible by two (except 2)
-	    if (num < 2) || (num % 2 == 0)
-	    {return false ; }
-	  for(int i = 2; i <= num/2; ++i){
-		  if (num % n == 0)
-			{return false ; }
-	   else
-		   return true ; }
-	}
-	*/
+	//both d and e will be switched over to BigNumbers eventually so we can encrypt and decrypt.	
 	
 	public Channel(int p) {
 		
